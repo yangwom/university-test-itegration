@@ -1,0 +1,20 @@
+{
+  "requirements": [
+    {
+      "bonus": false,
+      "description": "1 - Crie os endpoints para a sua API e os crie testes unitários",
+      "enabled": true,
+      "identifier": null,
+      "order": 1,
+      "skill_ids": []
+    },
+    {
+      "bonus": false,
+      "description": "2 - Faça testes de integração na sua API",
+      "enabled": true,
+      "identifier": null,
+      "order": 2,
+      "skill_ids": []
+    }
+  ]
+}
