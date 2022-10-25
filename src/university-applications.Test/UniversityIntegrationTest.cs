@@ -1,5 +1,5 @@
-using Moq;
-using university_applications.Services;
+using System.Net;
+using System.Net.Http.Json;
 using System.Text.Json;
 
 namespace university_applications.Test;
@@ -19,8 +19,10 @@ public class UniversityIntegrationTest: IClassFixture<TestingWebAppFactory<Progr
 
   public async Task ShouldFindAUniversityByCountryAndName(string country, string name)
   {
-     var response = await _client.GetAsync($"university/{country}/{name}");
-    response.StatusCode.Should().Be(System.Net.HttpStatusCode.OK);
+    var res = await _client.GetAsync($"university/{name}/{country}");
+    var result = await res.Content.ReadFromJsonAsync<object>();
+    res.StatusCode.Should().Be(HttpStatusCode.OK);
+    result.Should().BeOfType<JsonElement>();
   }
 
   [Theory]
@@ -28,7 +30,9 @@ public class UniversityIntegrationTest: IClassFixture<TestingWebAppFactory<Progr
   [InlineData("Turkey")]
   public async Task ShouldFindAUniversityByCountry(string country)
   {
-    var response = await _client.GetAsync($"university/{country}");
-    response.StatusCode.Should().Be(System.Net.HttpStatusCode.OK);
+    var res = await _client.GetAsync($"/university/{country}");
+    var result = await res.Content.ReadFromJsonAsync<object>();
+    res.StatusCode.Should().Be(HttpStatusCode.OK);
+    result.Should().BeOfType<JsonElement>();
   }
 }

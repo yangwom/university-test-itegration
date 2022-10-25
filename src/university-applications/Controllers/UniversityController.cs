@@ -3,36 +3,33 @@ using university_applications.Services;
 
 namespace university_applications.Controllers
 {
-    [ApiController]
-    [Route("university")]
-    public class UniversityController : ControllerBase, IUniversityController
+  [ApiController]
+  [Route("university")]
+  public class UniversityController : ControllerBase, IUniversityController
+  {
+    private readonly IUniversityService _service;
+    public UniversityController(IUniversityService service)
     {
-
-        private readonly IUniversityService _service;
-        public UniversityController(IUniversityService service)
-        {
-            _service = service;
-        }
-
-        [HttpGet]
-        [Route("{name}/{country}")]
-        public async Task<IActionResult> FindUniversity(string country, string name)
-        {
-            var response = await _service.FindUniversity(country, name);
-            if (response.ToString() == "[]") return NotFound();
-
-            return Ok(response);
-        }
-
-        [HttpGet]
-        [Route("{country}")]
-        public async Task<IActionResult> FindUniversity(string country)
-        {
-            var response = await _service.FindUniversity(country);
-            if (response.ToString() == "[]") return NotFound();
-
-            return Ok(response);
-
-        }
+      _service = service;
     }
+    [HttpGet]
+    [Route("{country}")]
+    public ActionResult FindUniversity(string country)
+    {
+      var universities = _service.FindUniversity(country);
+      if (universities.Result == null)
+      return BadRequest();
+      return Ok(universities.Result);
+    }
+    [HttpGet]
+    [Route("{name}/{country}")]
+    public ActionResult FindUniversity(string country, string name)
+    {
+      var universities = _service.FindUniversity(name, country);
+      if (universities.Result == null)
+        return BadRequest();
+      return Ok(universities.Result);
+    }
+  }
 }
+
